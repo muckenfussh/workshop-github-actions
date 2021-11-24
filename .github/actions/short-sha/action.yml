@@ -1,0 +1,18 @@
+name: short-sha
+inputs:
+  long-sha:
+    description: "long commit sha"
+    required: true
+outputs:
+  short-sha:
+    description: "short commit sha"
+    value: ${{ steps.short-sha-gen.outputs.short-sha-id }}
+
+runs:
+  using: "composite"
+  steps:
+    # add id to be able to reference in other steps
+    - id: short-sha-gen
+      # add step output with generated short sha, based on action input
+      run: echo "::set-output name=short-sha-id::$(echo ${{ inputs.long-sha }} | cut -c 1-8)"
+      shell: bash
